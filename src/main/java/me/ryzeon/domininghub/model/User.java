@@ -35,6 +35,9 @@ public class User {
     @DBRef
     private Set<Role> roles;
 
+    @DBRef
+    private UserInfo info;
+
     public User() {
     }
 }
