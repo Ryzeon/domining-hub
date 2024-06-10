@@ -13,4 +13,10 @@ public class File {
 
     @Id
     private String id;
+
+    private String name;
+
+    private FileType fileType;
+
+    private byte[] file;
 }
