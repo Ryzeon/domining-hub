@@ -1,14 +1,4 @@
 services:
-  domining_api:
-    build: ./
-    image: ryzeon/domining_api:latest
-    mem_limit: 512m
-    ports:
-      - "8045:8045"
-    restart: always
-    depends_on:
-      domiming_hub_mongodb:
-        condition: service_healthy
   domiming_hub_mongodb:
     image: 'mongo:latest'
     ports:
@@ -24,3 +14,4 @@ services:
       test: echo 'db.runCommand("ping")' | mongo domining_hub -u root -p hola12345 --quiet
       timeout: 10s
       retries: 10
+
