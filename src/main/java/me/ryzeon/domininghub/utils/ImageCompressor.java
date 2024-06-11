@@ -9,4 +9,7 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ImageCompressor {
+
+    public byte[] compress(byte[] image) {
+    }
 }
