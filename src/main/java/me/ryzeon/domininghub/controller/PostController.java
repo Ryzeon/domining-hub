@@ -18,9 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
  * Project: domining-hub

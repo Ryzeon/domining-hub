@@ -1,12 +1,20 @@
 package me.ryzeon.domininghub.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.repository.UserRepository;
+import me.ryzeon.domininghub.dto.comment.CommentDto;
+import me.ryzeon.domininghub.dto.comment.CommentPageableResponse;
+import me.ryzeon.domininghub.entity.Comment;
+import me.ryzeon.domininghub.service.ICommentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
@@ -20,5 +28,39 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class CommentsController {
 
-    private final UserRepository userRepository;
+    private final ICommentService commentService;
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "Comments found",
+            content = @Content(schema = @Schema(implementation = CommentPageableResponse.class))
+    )
+    @GetMapping("{id}")
+    public ResponseEntity<CommentPageableResponse> getComments(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<CommentDto> comments = commentService.findByPostId(id, paging).map(CommentDto::fromComment);
+        return ResponseEntity.ok(
+                new CommentPageableResponse(
+                        comments.getContent(),
+                        comments.getNumber(),
+                        comments.getTotalPages(),
+                        comments.getTotalElements()
+                )
+        );
+    }
+
+    @ApiResponse(
+            responseCode = "200",
+            description = "Comment deleted",
+            content = @Content()
+    )
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable String id) {
+        commentService.deleteComment(id);
+        return ResponseEntity.noContent().build();
+    }
 }
