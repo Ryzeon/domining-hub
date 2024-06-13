@@ -4,9 +4,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.shared.storage.model.File;
+import me.ryzeon.domininghub.shared.storage.entity.File;
 import me.ryzeon.domininghub.shared.storage.repository.FileRepository;
 import me.ryzeon.domininghub.shared.storage.service.IFileService;
+import me.ryzeon.domininghub.utils.ImageCompressor;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.IOUtils;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 /**
@@ -34,10 +37,16 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public Optional<File> upload(MultipartFile file) throws IOException {
+        byte[] optimizeImage = ImageCompressor.compress(file.getInputStream());
+        InputStream optimizedImageStream = new ByteArrayInputStream(optimizeImage);
+        long newFileSize = optimizeImage.length;
+
         DBObject metaData = new BasicDBObject();
-        metaData.put("size", file.getSize());
-        Object fileID = gridFsTemplate.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), metaData);
-        File storedFile = new File(file.getOriginalFilename(), file.getContentType(), file.getSize(), fileID.toString());
+        metaData.put("size", newFileSize);
+
+        Object fileID = gridFsTemplate.store(optimizedImageStream, file.getOriginalFilename(), file.getContentType(), metaData);
+        File storedFile = new File(file.getOriginalFilename(), file.getContentType(), newFileSize, fileID.toString());
+
         return Optional.of(fileRepository.save(storedFile));
     }
 

@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.shared.storage.model;
+package me.ryzeon.domininghub.shared.storage.entity;
 
 import lombok.Getter;
 import lombok.Setter;

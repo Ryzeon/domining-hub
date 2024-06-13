@@ -1,6 +1,6 @@
 package me.ryzeon.domininghub.shared.storage.service;
 
-import me.ryzeon.domininghub.shared.storage.model.File;
+import me.ryzeon.domininghub.shared.storage.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

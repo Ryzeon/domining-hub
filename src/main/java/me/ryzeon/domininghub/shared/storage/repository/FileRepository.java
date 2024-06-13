@@ -1,6 +1,6 @@
 package me.ryzeon.domininghub.shared.storage.repository;
 
-import me.ryzeon.domininghub.shared.storage.model.File;
+import me.ryzeon.domininghub.shared.storage.entity.File;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

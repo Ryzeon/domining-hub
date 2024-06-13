@@ -1,12 +1,16 @@
 package me.ryzeon.domininghub.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.shared.storage.model.File;
+import me.ryzeon.domininghub.shared.storage.dto.FileResponse;
+import me.ryzeon.domininghub.shared.storage.entity.File;
 import me.ryzeon.domininghub.shared.storage.service.IFileService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +24,8 @@ import java.nio.charset.StandardCharsets;
  * Project: domining-hub
  * Date: 6/11/24 @ 18:26
  */
-@Controller
+@CrossOrigin("*")
+@RestController
 @RequestMapping(value = "/api/v1/files", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Files", description = "Files Controller")
 @AllArgsConstructor
@@ -28,10 +33,18 @@ public class FilesController {
 
     private final IFileService fileService;
 
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "File uploaded successfully",
+                    content = @Content(schema = @Schema(implementation = FileResponse.class))
+            ),
+    })
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws IOException {
         File uploadedFile = fileService.upload(file).orElseThrow(() -> new IllegalArgumentException("Cannot upload file"));
-        return ResponseEntity.ok(uploadedFile);
+        var fileDto = new FileResponse(uploadedFile);
+        return new ResponseEntity<>(fileDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/image/{id}")

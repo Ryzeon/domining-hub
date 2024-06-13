@@ -1,6 +1,11 @@
 package me.ryzeon.domininghub.utils;
 
+import com.googlecode.pngtastic.core.PngImage;
+import com.googlecode.pngtastic.core.PngOptimizer;
 import lombok.experimental.UtilityClass;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
@@ -10,6 +15,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ImageCompressor {
 
-    public byte[] compress(byte[] image) {
+    public byte[] compress(InputStream inputStream) throws IOException {
+        PngImage pngImage = new PngImage(inputStream);
+        PngOptimizer optimizer = new PngOptimizer();
+        PngImage optimizedImage = optimizer.optimize(pngImage);
+        return optimizedImage.getImageData();
     }
 }
