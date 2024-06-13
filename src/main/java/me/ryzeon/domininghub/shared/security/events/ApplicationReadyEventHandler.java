@@ -1,8 +1,8 @@
 package me.ryzeon.domininghub.shared.security.events;
 
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.shared.security.model.Role;
-import me.ryzeon.domininghub.shared.security.model.Roles;
+import me.ryzeon.domininghub.shared.security.entity.Role;
+import me.ryzeon.domininghub.shared.security.entity.Roles;
 import me.ryzeon.domininghub.shared.security.repository.RoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,16 +2,9 @@ services:
   domiming_hub_mongodb:
     image: 'mongo:latest'
     ports:
-      - '27017'
-    expose:
-      - '27017'
+      - '27017:27017'
     environment:
-      - 'MONGO_INITDB_DATABASE=domining_hub'
-      - 'MONGO_INITDB_ROOT_PASSWORD=hola12345'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - MONGO_INITDB_DATABASE=domining_hub
+      - MONGO_INITDB_ROOT_PASSWORD=hola12345
+      - MONGO_INITDB_ROOT_USERNAME=root
     restart: always
-    healthcheck:
-      test: echo 'db.runCommand("ping")' | mongo domining_hub -u root -p hola12345 --quiet
-      timeout: 10s
-      retries: 10
-

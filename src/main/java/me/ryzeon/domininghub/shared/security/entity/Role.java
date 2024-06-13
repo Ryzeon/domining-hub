@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.shared.security.model;
+package me.ryzeon.domininghub.shared.security.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

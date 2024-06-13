@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.shared.security.model;
+package me.ryzeon.domininghub.shared.security.entity;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
