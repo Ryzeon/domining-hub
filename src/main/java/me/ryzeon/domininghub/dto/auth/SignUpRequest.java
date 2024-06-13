@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.dto;
+package me.ryzeon.domininghub.dto.auth;
 
 import java.util.List;
 

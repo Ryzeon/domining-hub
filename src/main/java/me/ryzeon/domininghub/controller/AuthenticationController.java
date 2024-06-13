@@ -1,16 +1,15 @@
 package me.ryzeon.domininghub.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.dto.SignInRequest;
-import me.ryzeon.domininghub.dto.SignInResponse;
-import me.ryzeon.domininghub.dto.SignUpRequest;
-import me.ryzeon.domininghub.dto.SignUpResponse;
+import me.ryzeon.domininghub.dto.auth.SignInRequest;
+import me.ryzeon.domininghub.dto.auth.SignInResponse;
+import me.ryzeon.domininghub.dto.auth.SignUpRequest;
+import me.ryzeon.domininghub.dto.auth.SignUpResponse;
 import me.ryzeon.domininghub.entity.MessageResponse;
 import me.ryzeon.domininghub.service.IUserService;
 import org.springframework.http.HttpStatus;
@@ -40,19 +39,15 @@ public class AuthenticationController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "An error occurred while signing in",
+                    description = "Invalid credentials",
                     content = @Content(schema = @Schema(implementation = MessageResponse.class))
             )
     })
     @PostMapping("/sign-in")
     public ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
-        try {
-            var details = userService.signIn(signInRequest.usernameOrEmail(), signInRequest.password()).orElseThrow(() -> new Exception("An error occurred while signing in"));
-            var signInResponse = SignInResponse.fromDetails(details);
-            return new ResponseEntity<>(signInResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
+        var details = userService.signIn(signInRequest.usernameOrEmail(), signInRequest.password()).orElseThrow(() -> new RuntimeException("An error occurred while signing in"));
+        var signInResponse = SignInResponse.fromDetails(details);
+        return new ResponseEntity<>(signInResponse, HttpStatus.OK);
     }
 
     @ApiResponses(value = {
@@ -63,18 +58,14 @@ public class AuthenticationController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "An error occurred while signing up",
+                    description = "Invalid credentials",
                     content = @Content(schema = @Schema(implementation = MessageResponse.class))
             )
     })
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
-        try {
-            var user = userService.signUp(signUpRequest).orElseThrow(() -> new Exception("An error occurred while signing up"));
-            var signUpResponse = SignUpResponse.fromUser(user);
-            return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-        }
+        var user = userService.signUp(signUpRequest).orElseThrow(() -> new RuntimeException("An error occurred while signing up"));
+        var signUpResponse = SignUpResponse.fromUser(user);
+        return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
     }
 }

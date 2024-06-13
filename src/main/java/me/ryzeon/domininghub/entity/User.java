@@ -1,5 +1,6 @@
 package me.ryzeon.domininghub.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import me.ryzeon.domininghub.shared.security.entity.Role;
 import org.springframework.data.annotation.Id;
@@ -10,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Unwrapped;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
@@ -28,7 +28,7 @@ public class User {
 
     private String names;
 
-    private String lastName;
+    private String lastNames;
 
     private String email;
 
@@ -43,9 +43,9 @@ public class User {
     public User() {
     }
 
-    public User(String names, String lastName, String email, String password, Set<Role> roles, UserInfo info) {
+    public User(String names, String lastNames, String email, String password, Set<Role> roles, UserInfo info) {
         this.names = names;
-        this.lastName = lastName;
+        this.lastNames = lastNames;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -53,8 +53,8 @@ public class User {
         this.username = getDefaultUsername();
     }
 
-    public User(String names, String lastName, String email, String password, List<Role> roles) {
-        this(names, lastName, email, password, new HashSet<>(roles), new UserInfo());
+    public User(String names, String lastNames, String email, String password, List<Role> roles) {
+        this(names, lastNames, email, password, new HashSet<>(roles), new UserInfo());
     }
 
     public String getDefaultUsername() {
@@ -68,7 +68,7 @@ public class User {
             }
         }
         username.append(".");
-        String[] lastNames = this.lastName.split(" ");
+        String[] lastNames = this.lastNames.split(" ");
         for (String lastName : lastNames) {
             if (lastName.length() > 2) {
                 username.append(lastName, 0, 2);
@@ -81,5 +81,13 @@ public class User {
         String random = String.valueOf((int) (Math.random() * 1000));
         username.append(random);
         return username.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
+        return id.equals(user.id);
     }
 }

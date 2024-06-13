@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.dto;
+package me.ryzeon.domininghub.dto.auth;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)

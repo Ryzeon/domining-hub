@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.dto;
+package me.ryzeon.domininghub.dto.auth;
 
 import me.ryzeon.domininghub.entity.User;
 import org.apache.commons.lang3.tuple.ImmutablePair;

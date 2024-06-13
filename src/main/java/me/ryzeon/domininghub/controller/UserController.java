@@ -1,12 +1,18 @@
 package me.ryzeon.domininghub.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import me.ryzeon.domininghub.dto.user.UserDto;
+import me.ryzeon.domininghub.entity.MessageResponse;
 import me.ryzeon.domininghub.repository.UserRepository;
+import me.ryzeon.domininghub.service.IUserService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
@@ -20,5 +26,28 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final IUserService userService;
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User found",
+                    content = @Content(schema = @Schema(implementation = UserDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid credentials",
+                    content = @Content(schema = @Schema(implementation = MessageResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = MessageResponse.class))
+            )
+    })
+    @GetMapping("{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
+        var user = userService.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(UserDto.fromUser(user));
+    }
 }

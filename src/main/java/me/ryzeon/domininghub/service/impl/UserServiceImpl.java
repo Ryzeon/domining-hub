@@ -1,7 +1,7 @@
 package me.ryzeon.domininghub.service.impl;
 
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.dto.SignUpRequest;
+import me.ryzeon.domininghub.dto.auth.SignUpRequest;
 import me.ryzeon.domininghub.entity.User;
 import me.ryzeon.domininghub.repository.UserRepository;
 import me.ryzeon.domininghub.service.IUserService;
@@ -10,7 +10,6 @@ import me.ryzeon.domininghub.shared.security.entity.Roles;
 import me.ryzeon.domininghub.shared.security.repository.RoleRepository;
 import me.ryzeon.domininghub.shared.security.service.IBearerTokenService;
 import me.ryzeon.domininghub.shared.security.service.IHashingService;
-import me.ryzeon.domininghub.shared.security.service.impl.HashingServiceImpl;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +55,11 @@ public class UserServiceImpl implements IUserService {
 
         userRepository.save(user);
         return userRepository.findByUsername(user.getUsername());
+    }
+
+    @Override
+    public Optional<User> findById(String id) {
+        return userRepository.findById(id);
     }
 
     @Override
