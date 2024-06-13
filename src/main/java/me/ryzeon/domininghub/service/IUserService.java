@@ -1,6 +1,8 @@
 package me.ryzeon.domininghub.service;
 
-import me.ryzeon.domininghub.model.User;
+import me.ryzeon.domininghub.dto.SignUpRequest;
+import me.ryzeon.domininghub.entity.User;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Optional;
 
@@ -11,5 +13,7 @@ import java.util.Optional;
  */
 public interface IUserService {
 
-    Optional<User> createUser(User user);
+    Optional<User> signUp(SignUpRequest request);
+
+    Optional<ImmutablePair<User, String>> signIn(String usernameOrEmail, String password);
 }

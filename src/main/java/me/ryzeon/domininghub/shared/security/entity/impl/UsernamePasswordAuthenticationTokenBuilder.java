@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.shared.security.model.impl;
+package me.ryzeon.domininghub.shared.security.entity.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
