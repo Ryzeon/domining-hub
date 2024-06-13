@@ -15,6 +15,7 @@ public record CommentDto(
         String userId,
         String postId,
         String commentType,
+        boolean subComment,
         List<CommentDto> subComments
 ) {
 
@@ -25,6 +26,7 @@ public record CommentDto(
                 comment.getAuthor().getId(),
                 comment.getPost().getId(),
                 comment.getType().name(),
+                comment.isSubComment(),
                 comment.getSubComments().stream().map(CommentDto::fromComment).toList()
         );
     }

@@ -16,4 +16,5 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends MongoRepository<Comment, String> {
 
     Page<Comment> findAllByPost(Post post, Pageable pageable);
+    Page<Comment> findAllByPostAndSubComment(Post past, boolean subCommand, Pageable pageable);
 }

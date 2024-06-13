@@ -31,9 +31,18 @@ public class Comment {
 
     private String content;
 
+    private boolean  subComment;
+
     @DBRef
     private List<Comment> subComments;
 
     @CreatedDate
     private Date createdAt;
+
+    public Comment() {
+    }
+
+    void addSubComment(Comment comment) {
+        subComments.add(comment);
+    }
 }

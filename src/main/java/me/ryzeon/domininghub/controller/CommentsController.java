@@ -7,11 +7,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import me.ryzeon.domininghub.dto.comment.CommentDto;
 import me.ryzeon.domininghub.dto.comment.CommentPageableResponse;
+import me.ryzeon.domininghub.dto.comment.CommentRequest;
 import me.ryzeon.domininghub.entity.Comment;
 import me.ryzeon.domininghub.service.ICommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,18 @@ import org.springframework.web.bind.annotation.*;
 public class CommentsController {
 
     private final ICommentService commentService;
+
+
+    @ApiResponse(
+            responseCode = "201",
+            description = "Comment Created",
+            content = @Content(schema = @Schema(implementation = CommentDto.class))
+    )
+    @PostMapping
+    public ResponseEntity<CommentDto> createPost(CommentRequest request) {
+        var comment = commentService.createComment(request).orElseThrow(() -> new RuntimeException("Error with creation of comment"));
+        return new ResponseEntity<>(CommentDto.fromComment(comment), HttpStatus.CREATED);
+    }
 
     @ApiResponse(
             responseCode = "200",
