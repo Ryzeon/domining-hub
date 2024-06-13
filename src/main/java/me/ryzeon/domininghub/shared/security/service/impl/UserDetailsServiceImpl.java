@@ -1,7 +1,7 @@
 package me.ryzeon.domininghub.shared.security.service.impl;
 
 import lombok.AllArgsConstructor;
-import me.ryzeon.domininghub.shared.security.model.impl.UserDetailsImpl;
+import me.ryzeon.domininghub.shared.security.entity.impl.UserDetailsImpl;
 import me.ryzeon.domininghub.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

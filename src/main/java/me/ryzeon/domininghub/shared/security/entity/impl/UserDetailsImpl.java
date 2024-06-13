@@ -1,9 +1,9 @@
-package me.ryzeon.domininghub.shared.security.model.impl;
+package me.ryzeon.domininghub.shared.security.entity.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import me.ryzeon.domininghub.model.User;
+import me.ryzeon.domininghub.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

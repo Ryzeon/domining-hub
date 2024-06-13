@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import me.ryzeon.domininghub.shared.security.model.impl.UsernamePasswordAuthenticationTokenBuilder;
+import me.ryzeon.domininghub.shared.security.entity.impl.UsernamePasswordAuthenticationTokenBuilder;
 import me.ryzeon.domininghub.shared.security.service.IBearerTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
