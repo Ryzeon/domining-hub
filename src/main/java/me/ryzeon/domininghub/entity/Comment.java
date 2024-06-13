@@ -1,4 +1,4 @@
-package me.ryzeon.domininghub.model;
+package me.ryzeon.domininghub.entity;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -13,7 +13,7 @@ import java.util.Date;
  * Date: 6/6/24 @ 18:56
  */
 @Document
-public class Comments {
+public class Comment {
 
     @Id
     private String id;
