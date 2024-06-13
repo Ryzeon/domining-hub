@@ -1,6 +1,6 @@
-package me.ryzeon.domininghub.model;
+package me.ryzeon.domininghub.entity;
 
-import me.ryzeon.domininghub.shared.storage.model.File;
+import me.ryzeon.domininghub.shared.storage.entity.File;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
