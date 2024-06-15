@@ -56,6 +56,9 @@ public class FilesController {
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable String id) throws IOException {
         File file = fileService.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find file with id: " + id));
+        if (!file.isImage()) {
+            throw new IllegalArgumentException("This endpoint is only for images");
+        }
         String encodedFileName = URLEncoder.encode(file.getName(), StandardCharsets.UTF_8);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(file.getContentType()));
@@ -66,6 +69,21 @@ public class FilesController {
     @GetMapping("/video/{id}")
     public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String id) throws IOException {
         File file = fileService.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find file with id: " + id));
+        if (!file.isVideo()) {
+            throw new IllegalArgumentException("This endpoint is only for videos");
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
+                .body(new InputStreamResource(new ByteArrayInputStream(file.getBytes())));
+    }
+
+    @GetMapping("/document/{id}")
+    public ResponseEntity<InputStreamResource> streamDocument(@PathVariable String id) throws IOException {
+        File file = fileService.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find file with id: " + id));
+        if (!file.isDocument()) {
+            throw new IllegalArgumentException("This endpoint is only for documents");
+        }
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")

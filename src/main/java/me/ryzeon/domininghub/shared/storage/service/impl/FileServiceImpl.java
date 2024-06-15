@@ -42,9 +42,12 @@ public class FileServiceImpl implements IFileService {
         if (file.getSize() > 15 * 1024 * 1024) {
             throw new IllegalArgumentException("File size is too big");
         }
-        byte[] optimizeImage = ImageCompressor.compress(file.getInputStream());
-        InputStream optimizedImageStream = new ByteArrayInputStream(optimizeImage);
-        long newFileSize = optimizeImage.length;
+//        byte[] optimizeImage = ImageCompressor.compress(file.getInputStream());
+//        InputStream optimizedImageStream = new ByteArrayInputStream(optimizeImage);
+//        long newFileSize = optimizeImage.length;
+
+        InputStream optimizedImageStream = file.getInputStream();
+        long newFileSize = file.getSize();
 
         DBObject metaData = new BasicDBObject();
         metaData.put("size", newFileSize);

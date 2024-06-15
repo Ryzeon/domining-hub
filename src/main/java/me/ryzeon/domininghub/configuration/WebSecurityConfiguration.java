@@ -78,6 +78,7 @@ public class WebSecurityConfiguration {
                                 "/api/v1/files/download/**",
                                 "/api/v1/files/image/**",
                                 "/api/v1/files/video/**",
+                                "/api/v1/files/document/**",
                                 "/webjars/**"
                         ).permitAll()
                         .anyRequest().authenticated());

@@ -1,6 +1,8 @@
 package me.ryzeon.domininghub.configuration.exception;
 
 import me.ryzeon.domininghub.entity.MessageResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,27 +18,29 @@ import java.io.IOException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<MessageResponse> handleRuntimeException(RuntimeException e) {
-        e.printStackTrace();
+        LOGGER.error("Debugging error", e);
         return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
     }
 
     @ExceptionHandler({IOException.class})
     public ResponseEntity<MessageResponse> handleIOException(IOException e) {
-        e.printStackTrace();
+        LOGGER.error("Debugging error", e);
         return ResponseEntity.badRequest().body(new MessageResponse(e.getLocalizedMessage()));
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<MessageResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        e.printStackTrace();
+        LOGGER.error("Debugging error", e);
         return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
     }
 
     @ExceptionHandler({MissingServletRequestPartException.class})
     public ResponseEntity<MessageResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e) {
-        e.printStackTrace();
+        LOGGER.error("Debugging error", e);
         return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
     }
 

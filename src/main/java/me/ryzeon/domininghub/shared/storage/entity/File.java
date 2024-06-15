@@ -44,4 +44,28 @@ public class File {
     public String getNiceFileSize() {
         return ArchiveUtils.getNiceFileSize(size);
     }
+
+    public FileType getFileType() {
+        return ArchiveUtils.getFileType(name);
+    }
+
+    public boolean isImage() {
+        return getFileType() == FileType.IMAGE;
+    }
+
+    public boolean isVideo() {
+        return getFileType() == FileType.VIDEO;
+    }
+
+    public boolean isAudio() {
+        return getFileType() == FileType.AUDIO;
+    }
+
+    public boolean isDocument() {
+        return getFileType() == FileType.DOCUMENT;
+    }
+
+    public boolean isArchive() {
+        return getFileType() == FileType.ARCHIVE;
+    }
 }
