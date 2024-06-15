@@ -44,7 +44,7 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/sign-in")
-    public ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
         var details = userService.signIn(signInRequest.usernameOrEmail(), signInRequest.password()).orElseThrow(() -> new RuntimeException("An error occurred while signing in"));
         var signInResponse = SignInResponse.fromDetails(details);
         return new ResponseEntity<>(signInResponse, HttpStatus.OK);
@@ -63,7 +63,7 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
         var user = userService.signUp(signUpRequest).orElseThrow(() -> new RuntimeException("An error occurred while signing up"));
         var signUpResponse = SignUpResponse.fromUser(user);
         return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);

@@ -8,6 +8,7 @@ import me.ryzeon.domininghub.shared.storage.entity.File;
 import me.ryzeon.domininghub.shared.storage.repository.FileRepository;
 import me.ryzeon.domininghub.shared.storage.service.IFileService;
 import me.ryzeon.domininghub.utils.ImageCompressor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -37,6 +38,10 @@ public class FileServiceImpl implements IFileService {
 
     @Override
     public Optional<File> upload(MultipartFile file) throws IOException {
+        // Max file size 15MB
+        if (file.getSize() > 15 * 1024 * 1024) {
+            throw new IllegalArgumentException("File size is too big");
+        }
         byte[] optimizeImage = ImageCompressor.compress(file.getInputStream());
         InputStream optimizedImageStream = new ByteArrayInputStream(optimizeImage);
         long newFileSize = optimizeImage.length;
@@ -55,9 +60,10 @@ public class FileServiceImpl implements IFileService {
         Optional<File> file = fileRepository.findById(id);
         if (file.isPresent()) {
             File dbFile = file.get();
-            GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
+            ObjectId objectId = new ObjectId(dbFile.getStoreId()); // Use the id from the File object
+            GridFSFile gridFSFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(objectId)));
             if (gridFSFile == null) {
-                return Optional.empty();
+                throw new IllegalArgumentException("Cannot find gridFS file with id: " + id);
             }
             dbFile.setBytes(IOUtils.toByteArray(operations.getResource(gridFSFile).getInputStream()));
             return Optional.of(dbFile);

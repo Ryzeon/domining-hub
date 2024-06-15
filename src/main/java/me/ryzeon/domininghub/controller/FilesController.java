@@ -1,5 +1,7 @@
 package me.ryzeon.domininghub.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,8 +42,12 @@ public class FilesController {
                     content = @Content(schema = @Schema(implementation = FileResponse.class))
             ),
     })
-    @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws IOException {
+    @Operation(summary = "Upload a file")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FileResponse> upload(
+            @Parameter(description = "File to upload", required = true,
+                    schema = @Schema(type = "string", format = "binary", description = "The file to upload"))
+            @RequestPart("file") MultipartFile file) throws IOException {
         File uploadedFile = fileService.upload(file).orElseThrow(() -> new IllegalArgumentException("Cannot upload file"));
         var fileDto = new FileResponse(uploadedFile);
         return new ResponseEntity<>(fileDto, HttpStatus.CREATED);

@@ -4,6 +4,7 @@ import me.ryzeon.domininghub.entity.MessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.io.IOException;
 
@@ -26,4 +27,17 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return ResponseEntity.badRequest().body(new MessageResponse(e.getLocalizedMessage()));
     }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<MessageResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler({MissingServletRequestPartException.class})
+    public ResponseEntity<MessageResponse> handleMissingServletRequestPartException(MissingServletRequestPartException e) {
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+    }
+
 }

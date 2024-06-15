@@ -19,6 +19,6 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
     restart: always
     healthcheck:
-      test: echo 'db.runCommand("ping")' | mongo domining_hub -u root -p hola12345 --quiet
+      test: echo 'db.runCommand("ping")' | mongo domining_hub -u root -p hola12345 --quiet -authenticationDatabase admin
       timeout: 10s
       retries: 10
