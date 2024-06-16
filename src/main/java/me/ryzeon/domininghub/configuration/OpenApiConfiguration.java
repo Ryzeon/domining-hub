@@ -38,7 +38,7 @@ public class OpenApiConfiguration {
         boolean isRunningInProd =  activeProfile.equals("prod") || activeProfile.equals("dev");
 
         if (isRunningInProd) {
-            openApi.servers(Collections.singletonList(new Server().url("http://localhost:9090")));
+            openApi.servers(Collections.singletonList(new Server().url("http://ryzeon.me:9090")));
         } else {
             openApi.servers(Collections.singletonList(new Server().url("http://localhost:8080")));
         }
