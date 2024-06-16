@@ -1,24 +1,65 @@
 services:
-  domining_api:
-    build: ./
-    image: ryzeon/domining_api:latest
-    mem_limit: 512m
+  do_mining_proxy_balancer:
+    build:
+      context: nginx
+      dockerfile: Dockerfile
     ports:
-      - "8045:8045"
-    restart: always
+      - "9090:9090"
+    networks:
+      - do_mining_hub_network
     depends_on:
-      domiming_hub_mongodb:
+      - do-mining-api-1
+      - do-mining-api-2
+      - do_mining_hub_mongodb
+
+  do-mining-api-1:
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    image: ryzeon/do_mining_api:latest
+#    mem_limit: 512m
+    ports:
+      - "8075:8080"
+    restart: always
+    networks:
+        - do_mining_hub_network
+    depends_on:
+      do_mining_hub_mongodb:
         condition: service_healthy
-  domiming_hub_mongodb:
+
+  do-mining-api-2:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: ryzeon/do_mining_api:latest
+#    mem_limit: 512m
+    ports:
+      - "8090:8080"
+    restart: always
+    networks:
+      - do_mining_hub_network
+    depends_on:
+      do_mining_hub_mongodb:
+        condition: service_healthy
+
+  do_mining_hub_mongodb:
     image: 'mongo:latest'
     ports:
       - '27017:27017'
     environment:
-      - MONGO_INITDB_DATABASE=domining_hub
+      - MONGO_INITDB_DATABASE=do_mining_hub
       - MONGO_INITDB_ROOT_PASSWORD=hola12345
       - MONGO_INITDB_ROOT_USERNAME=root
     restart: always
+    networks:
+        - do_mining_hub_network
     healthcheck:
-      test: echo 'db.runCommand("ping")' | mongo domining_hub -u root -p hola12345 --quiet -authenticationDatabase admin
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/do_mining_hub --quiet
+      interval: 10s
       timeout: 10s
-      retries: 10
+      retries: 3
+      start_period: 20s
+
+networks:
+  do_mining_hub_network:
+    driver: bridge
