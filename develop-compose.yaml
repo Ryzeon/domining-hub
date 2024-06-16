@@ -1,10 +1,16 @@
 services:
-  domiming_hub_mongodb:
+  do_mining_hub_mongodb:
     image: 'mongo:latest'
     ports:
       - '27017:27017'
     environment:
-      - MONGO_INITDB_DATABASE=domining_hub
+      - MONGO_INITDB_DATABASE=do_mining_hub
       - MONGO_INITDB_ROOT_PASSWORD=hola12345
       - MONGO_INITDB_ROOT_USERNAME=root
     restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/do_mining_hub --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
