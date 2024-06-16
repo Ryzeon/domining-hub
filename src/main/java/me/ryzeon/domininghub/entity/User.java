@@ -2,6 +2,7 @@ package me.ryzeon.domininghub.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import me.ryzeon.domininghub.dto.user.UpdateUserDetailsRequest;
 import me.ryzeon.domininghub.shared.security.entity.Role;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -41,6 +42,24 @@ public class User {
     private UserInfo info;
 
     public User() {
+    }
+
+
+    public void updateUserInfo(UpdateUserDetailsRequest request) {
+        if (request.names() != null && !request.names().isBlank()) {
+            this.names = request.names();
+        }
+        if (request.lastNames() != null && !request.lastNames().isBlank()) {
+            this.lastNames = request.lastNames();
+        }
+        if (request.username() != null && !request.username().isBlank()) {
+            this.username = request.username();
+        }
+        this.info = new UserInfo(
+                request.position(),
+                request.company(),
+                request.about()
+        );
     }
 
     public User(String names, String lastNames, String email, String password, Set<Role> roles, UserInfo info) {

@@ -2,6 +2,7 @@ package me.ryzeon.domininghub.service.impl;
 
 import lombok.AllArgsConstructor;
 import me.ryzeon.domininghub.dto.auth.SignUpRequest;
+import me.ryzeon.domininghub.dto.user.UpdateUserDetailsRequest;
 import me.ryzeon.domininghub.entity.User;
 import me.ryzeon.domininghub.repository.UserRepository;
 import me.ryzeon.domininghub.service.IUserService;
@@ -71,5 +72,16 @@ public class UserServiceImpl implements IUserService {
         }
         var token = tokenService.generateToken(user.getUsername());
         return Optional.of(new ImmutablePair<>(user, token));
+    }
+
+    @Override
+    public Optional<User> updateDetails(String id, UpdateUserDetailsRequest request) {
+        var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        if (userRepository.existsByUsername(request.username())) {
+            throw new RuntimeException("Cannot details, username already exists");
+        }
+        user.updateUserInfo(request);
+        userRepository.save(user);
+        return Optional.of(user);
     }
 }

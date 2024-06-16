@@ -11,7 +11,8 @@ import me.ryzeon.domininghub.utils.ArchiveUtils;
 public record FileResponse(
         String name,
         String id,
-        String url,
+        String downloadUrl,
+        String viewUrl,
         String niceFileSize
 ) {
 
@@ -19,7 +20,8 @@ public record FileResponse(
         this(
                 file.getName(),
                 file.getId(),
-                "/download/%s".formatted(file.getId()),
+                file.getDownloadUrl(),
+                file.getViewUrl(),
                 ArchiveUtils.getNiceFileSize(file.getSize())
         );
     }

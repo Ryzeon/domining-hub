@@ -47,7 +47,8 @@ public class FilesController {
     public ResponseEntity<FileResponse> upload(
             @Parameter(description = "File to upload", required = true,
                     schema = @Schema(type = "string", format = "binary", description = "The file to upload"))
-            @RequestPart("file") MultipartFile file) throws IOException {
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
         File uploadedFile = fileService.upload(file).orElseThrow(() -> new IllegalArgumentException("Cannot upload file"));
         var fileDto = new FileResponse(uploadedFile);
         return new ResponseEntity<>(fileDto, HttpStatus.CREATED);

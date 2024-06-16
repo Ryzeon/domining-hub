@@ -6,9 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import me.ryzeon.domininghub.dto.user.UpdateUserDetailsRequest;
 import me.ryzeon.domininghub.dto.user.UserDto;
 import me.ryzeon.domininghub.entity.MessageResponse;
-import me.ryzeon.domininghub.repository.UserRepository;
 import me.ryzeon.domininghub.service.IUserService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +48,30 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable String id) {
         var user = userService.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(UserDto.fromUser(user));
+    }
+
+    // update user details
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User updated",
+                    content = @Content(schema = @Schema(implementation = UserDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid credentials",
+                    content = @Content(schema = @Schema(implementation = MessageResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = MessageResponse.class))
+            )
+    })
+    @PutMapping("{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable String id, @RequestBody UpdateUserDetailsRequest request) {
+        var user = userService.updateDetails(id, request).orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(UserDto.fromUser(user));
     }
 }

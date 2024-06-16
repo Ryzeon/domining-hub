@@ -1,6 +1,7 @@
 package me.ryzeon.domininghub.service;
 
 import me.ryzeon.domininghub.dto.auth.SignUpRequest;
+import me.ryzeon.domininghub.dto.user.UpdateUserDetailsRequest;
 import me.ryzeon.domininghub.entity.User;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -18,4 +19,7 @@ public interface IUserService {
     Optional<User> findById(String id);
 
     Optional<ImmutablePair<User, String>> signIn(String usernameOrEmail, String password);
+
+
+    Optional<User> updateDetails(String id, UpdateUserDetailsRequest request);
 }

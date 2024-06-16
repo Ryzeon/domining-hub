@@ -1,10 +1,6 @@
 package me.ryzeon.domininghub.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)

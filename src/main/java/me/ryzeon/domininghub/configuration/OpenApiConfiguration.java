@@ -1,17 +1,17 @@
 package me.ryzeon.domininghub.configuration;
 
 import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
  * Project: domining-hub
@@ -19,6 +19,9 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OpenApiConfiguration {
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     @Bean
     public OpenAPI learningPlatformOpenApi() {
@@ -31,6 +34,14 @@ public class OpenApiConfiguration {
                 .license(new License().name("Apache 2.0")
                         .url("https://springdoc.org")));
 
+        // if prod o dev get from application.properties
+        boolean isRunningInProd =  activeProfile.equals("prod") || activeProfile.equals("dev");
+
+        if (isRunningInProd) {
+            openApi.servers(Collections.singletonList(new Server().url("http://localhost:9090")));
+        } else {
+            openApi.servers(Collections.singletonList(new Server().url("http://localhost:8080")));
+        }
 
         final String securitySchemeName = "bearerAuth";
 
