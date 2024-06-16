@@ -45,7 +45,7 @@ services:
   do_mining_hub_mongodb:
     image: 'mongo:latest'
     ports:
-      - '27017:27017'
+      - '27023:27017'
     environment:
       - MONGO_INITDB_DATABASE=do_mining_hub
       - MONGO_INITDB_ROOT_PASSWORD=hola12345
