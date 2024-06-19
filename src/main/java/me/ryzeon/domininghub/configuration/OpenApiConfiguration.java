@@ -20,7 +20,7 @@ import java.util.Collections;
 @Configuration
 public class OpenApiConfiguration {
 
-    @Value("${spring.profiles.default}")
+    @Value("${spring.profiles.active}")
     private String activeProfile;
 
     @Bean
