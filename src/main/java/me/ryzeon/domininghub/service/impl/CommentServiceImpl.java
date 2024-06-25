@@ -3,6 +3,7 @@ package me.ryzeon.domininghub.service.impl;
 import lombok.AllArgsConstructor;
 import me.ryzeon.domininghub.dto.comment.CommentRequest;
 import me.ryzeon.domininghub.entity.Comment;
+import me.ryzeon.domininghub.entity.CommentType;
 import me.ryzeon.domininghub.repository.CommentRepository;
 import me.ryzeon.domininghub.service.ICommentService;
 import me.ryzeon.domininghub.service.IPostService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,9 +47,23 @@ public class CommentServiceImpl implements ICommentService {
         var comment = commentRepository.findById(request.commentId());
         Comment savedComment = null;
         if (post.isPresent()) {
-
+            savedComment = new Comment(user, CommentType.POST, post.get(), request.content(), false, List.of());
+            savedComment = commentRepository.save(savedComment);
+            return Optional.of(savedComment);
         } else {
-
+            if (comment.isPresent()) {
+                savedComment = new Comment(
+                        user,
+                        CommentType.SUB_COMMENT,
+                        null,
+                        request.content(),
+                        true,
+                        List.of());
+                savedComment = commentRepository.save(savedComment);
+                comment.get().addSubComment(savedComment);
+                commentRepository.save(comment.get());
+                return Optional.of(savedComment);
+            }
         }
         return Optional.empty();
     }

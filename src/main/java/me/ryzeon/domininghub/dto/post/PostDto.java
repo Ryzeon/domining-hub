@@ -15,6 +15,7 @@ import java.util.List;
 public record PostDto(
         String id,
         String authorId,
+        String authorUsername,
         String title,
         String content,
         Date createdAt,
@@ -26,11 +27,12 @@ public record PostDto(
         return new PostDto(
                 post.getId(),
                 post.getAuthor().getId(),
+                post.getAuthor().getUsername(),
                 post.getTitle(),
                 post.getContent(),
                 post.getCreatedAt(),
                 post.getCompany(),
-                post.getFiles().stream().map(File::getId).toList(),
+                post.getFiles().stream().map(File::getViewUrl).toList(),
                 post.getLikes().stream().map(User::getId).toList()
         );
     }

@@ -53,15 +53,15 @@ public class File {
 
     public String getViewUrl() {
         return switch (getFileType()) {
-            case IMAGE -> "/api/v1/files/image/" + id;
-            case VIDEO -> "/api/v1/files/video/" + id;
-            case DOCUMENT -> "/api/v1/files/document/" + id;
-            default -> "/api/v1/files/download/" + id;
+            case IMAGE -> "/files/image/" + id;
+            case VIDEO -> "/files/video/" + id;
+            case DOCUMENT -> "/files/document/" + id;
+            default -> "/files/download/" + id;
         };
     }
 
     public String getDownloadUrl() {
-        return "/api/v1/files/download/" + id;
+        return "/files/download/" + id;
     }
 
     public FileType getFileType() {

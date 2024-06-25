@@ -42,7 +42,16 @@ public class Comment {
     public Comment() {
     }
 
-    void addSubComment(Comment comment) {
+    public Comment(User author, CommentType type, Post post, String content, boolean subComment, List<Comment> subComments) {
+        this.author = author;
+        this.type = type;
+        this.post = post;
+        this.content = content;
+        this.subComment = subComment;
+        this.subComments = subComments;
+    }
+
+    public void addSubComment(Comment comment) {
         subComments.add(comment);
     }
 }
