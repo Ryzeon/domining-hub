@@ -75,6 +75,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public Optional<ImmutablePair<User, String>> refreshToken(String refreshToken) {
+        var username = tokenService.getUsernameFromToken(refreshToken);
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        var token = tokenService.generateToken(user.getUsername());
+        return Optional.of(new ImmutablePair<>(user, token));
+    }
+
+    @Override
     public Optional<User> updateDetails(String id, UpdateUserDetailsRequest request) {
         var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         if (userRepository.existsByUsername(request.username())) {

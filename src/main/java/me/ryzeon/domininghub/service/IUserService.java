@@ -20,6 +20,7 @@ public interface IUserService {
 
     Optional<ImmutablePair<User, String>> signIn(String usernameOrEmail, String password);
 
+    Optional<ImmutablePair<User, String>> refreshToken(String refreshToken);
 
     Optional<User> updateDetails(String id, UpdateUserDetailsRequest request);
 }

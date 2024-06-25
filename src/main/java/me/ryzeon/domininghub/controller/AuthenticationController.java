@@ -68,4 +68,11 @@ public class AuthenticationController {
         var signUpResponse = SignUpResponse.fromUser(user);
         return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
     }
+
+    @PostMapping("/refresh-token/{refreshToken}")
+    public ResponseEntity<SignInResponse> refreshToken(@PathVariable String refreshToken) {
+        var details = userService.refreshToken(refreshToken).orElseThrow(() -> new RuntimeException("An error occurred while refreshing token"));
+        var signInResponse = SignInResponse.fromDetails(details);
+        return new ResponseEntity<>(signInResponse, HttpStatus.OK);
+    }
 }
