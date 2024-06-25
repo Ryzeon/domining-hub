@@ -15,9 +15,12 @@ RUN sed -i 's/spring.profiles.active=dev/spring.profiles.active=prod/' src/main/
 RUN mvn clean install
 
 FROM openjdk:21-jdk-slim
-MAINTAINER Ryzeon
-ARG JAR_FILE=target/domining-hub-0.0.1-SNAPSHOT.jar
+
+COPY --from=build /app/target/domining-hub-0.0.1-SNAPSHOT.jar /app.jar
+
 COPY ${JAR_FILE} app.jar
+
 EXPOSE 8080
+
 ENTRYPOINT ["java","-jar","/app.jar"]
 
