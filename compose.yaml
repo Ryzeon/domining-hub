@@ -53,6 +53,8 @@ services:
     restart: always
     networks:
         - do_mining_hub_network
+    volumes:
+      - mongodb_data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/do_mining_hub --quiet
       interval: 10s
