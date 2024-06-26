@@ -73,10 +73,10 @@ public class FilesController {
         if (!file.isVideo()) {
             throw new IllegalArgumentException("This endpoint is only for videos");
         }
-        String niceName = file.getName().contains(".") ? file.getName() : file.getName() + ".mp4";
+        String niceName = file.getName().contains(".") ? file.getName().substring(0, file.getName().lastIndexOf(".")) + ".mp4" : file.getName() + ".mp4";
         String encodedFileName = URLEncoder.encode(niceName, StandardCharsets.UTF_8);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentLength(file.getBytes().length);
         headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
         headers.set("Accept-Ranges", "bytes");
