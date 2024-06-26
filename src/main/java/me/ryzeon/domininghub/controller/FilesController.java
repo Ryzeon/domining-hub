@@ -95,7 +95,7 @@ public class FilesController {
 
         if (range == null) {
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+            headers.setContentType(MediaType.valueOf("video/mp4"));
             headers.setContentLength(file.getBytes().length);
             headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
             headers.set("Accept-Ranges", "bytes");
@@ -109,7 +109,7 @@ public class FilesController {
             }
             int length = to - from + 1;
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+            headers.setContentType(MediaType.valueOf("video/mp4"));
             headers.setContentLength(length);
             headers.set("Content-Range", "bytes " + from + "-" + to + "/" + file.getBytes().length);
             headers.set("Accept-Ranges", "bytes");
