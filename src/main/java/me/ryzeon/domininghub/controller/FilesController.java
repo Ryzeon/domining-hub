@@ -73,10 +73,12 @@ public class FilesController {
         if (!file.isVideo()) {
             throw new IllegalArgumentException("This endpoint is only for videos");
         }
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(file.getContentType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"")
-                .body(new InputStreamResource(new ByteArrayInputStream(file.getBytes())));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+        headers.setContentLength(file.getBytes().length);
+        headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
+        headers.set("Accept-Ranges", "bytes");
+        return new ResponseEntity<>(new InputStreamResource(new ByteArrayInputStream(file.getBytes())), headers, HttpStatus.OK);
     }
 
     @GetMapping("/document/{id}")
