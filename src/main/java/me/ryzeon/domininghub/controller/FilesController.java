@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * Created by Alex Avila Asto - A.K.A (Ryzeon)
@@ -67,21 +68,54 @@ public class FilesController {
         return new ResponseEntity<>(file.getBytes(), headers, HttpStatus.OK);
     }
 
+//    @GetMapping("/video/{id}")
+//    public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String id) throws IOException {
+//        File file = fileService.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find file with id: " + id));
+//        if (!file.isVideo()) {
+//            throw new IllegalArgumentException("This endpoint is only for videos");
+//        }
+//        String niceName = file.getName().contains(".") ? file.getName().substring(0, file.getName().lastIndexOf(".")) + ".mp4" : file.getName() + ".mp4";
+//        String encodedFileName = URLEncoder.encode(niceName, StandardCharsets.UTF_8);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentLength(file.getBytes().length);
+//        headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
+//        headers.set("Accept-Ranges", "bytes");
+//        headers.setContentDisposition(ContentDisposition.builder("inline").filename(encodedFileName).build());
+//        return new ResponseEntity<>(new InputStreamResource(new ByteArrayInputStream(file.getBytes())), headers, HttpStatus.OK);
+//    }
+
     @GetMapping("/video/{id}")
-    public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String id) throws IOException {
+    public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String id,
+                                                           @RequestHeader(value = "Range", required = false) String range) throws IOException {
         File file = fileService.findById(id).orElseThrow(() -> new IllegalArgumentException("Cannot find file with id: " + id));
         if (!file.isVideo()) {
             throw new IllegalArgumentException("This endpoint is only for videos");
         }
-        String niceName = file.getName().contains(".") ? file.getName().substring(0, file.getName().lastIndexOf(".")) + ".mp4" : file.getName() + ".mp4";
-        String encodedFileName = URLEncoder.encode(niceName, StandardCharsets.UTF_8);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentLength(file.getBytes().length);
-        headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
-        headers.set("Accept-Ranges", "bytes");
-        headers.setContentDisposition(ContentDisposition.builder("inline").filename(encodedFileName).build());
-        return new ResponseEntity<>(new InputStreamResource(new ByteArrayInputStream(file.getBytes())), headers, HttpStatus.OK);
+
+        if (range == null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+            headers.setContentLength(file.getBytes().length);
+            headers.set("Content-Range", "bytes " + 0 + "-" + (file.getBytes().length - 1) + "/" + file.getBytes().length);
+            headers.set("Accept-Ranges", "bytes");
+            return new ResponseEntity<>(new InputStreamResource(new ByteArrayInputStream(file.getBytes())), headers, HttpStatus.OK);
+        } else {
+            String[] ranges = range.split("-");
+            int from = Integer.parseInt(ranges[0].substring(6));
+            int to = file.getBytes().length - 1;
+            if (ranges.length == 2) {
+                to = Integer.parseInt(ranges[1]);
+            }
+            int length = to - from + 1;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(file.getContentType()));
+            headers.setContentLength(length);
+            headers.set("Content-Range", "bytes " + from + "-" + to + "/" + file.getBytes().length);
+            headers.set("Accept-Ranges", "bytes");
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Arrays.copyOfRange(file.getBytes(), from, from + length));
+            return new ResponseEntity<>(new InputStreamResource(byteArrayInputStream), headers, HttpStatus.PARTIAL_CONTENT);
+        }
     }
 
     @GetMapping("/document/{id}")
