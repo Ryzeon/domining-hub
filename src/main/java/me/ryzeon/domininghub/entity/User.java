@@ -109,4 +109,8 @@ public class User {
         User user = (User) obj;
         return id.equals(user.id);
     }
+
+    public String getFullName() {
+        return names + " " + lastNames;
+    }
 }

@@ -42,10 +42,11 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public Optional<Comment> createComment(CommentRequest request) {
+        System.out.println(request);
         var user = userService.findById(request.userId()).orElseThrow(() -> new RuntimeException("Author nor found"));
         var post = postService.findById(request.postId());
         var comment = commentRepository.findById(request.commentId());
-        Comment savedComment = null;
+        Comment savedComment;
         if (post.isPresent()) {
             savedComment = new Comment(user, CommentType.POST, post.get(), request.content(), false, List.of());
             savedComment = commentRepository.save(savedComment);

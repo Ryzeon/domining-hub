@@ -39,7 +39,7 @@ public class CommentsController {
             content = @Content(schema = @Schema(implementation = CommentDto.class))
     )
     @PostMapping
-    public ResponseEntity<CommentDto> createPost(CommentRequest request) {
+    public ResponseEntity<CommentDto> createPost(@RequestBody CommentRequest request) {
         var comment = commentService.createComment(request).orElseThrow(() -> new RuntimeException("Error with creation of comment"));
         return new ResponseEntity<>(CommentDto.fromComment(comment), HttpStatus.CREATED);
     }

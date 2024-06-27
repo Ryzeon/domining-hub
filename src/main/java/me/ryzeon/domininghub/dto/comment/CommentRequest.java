@@ -13,4 +13,12 @@ public record CommentRequest(
         // If commentId is null, it means that the comment is a post
         String commentId
 ) {
+    public CommentRequest {
+        if (postId == null) {
+            postId = "";
+        }
+        if (commentId == null) {
+            commentId = "";
+        }
+    }
 }
